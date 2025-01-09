@@ -1,0 +1,10 @@
+name: da_prototyp
+title:
+username: textmin-r
+account: textmin-r
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 13597068
+bundleId: 9520025
+url: https://textmin-r.shinyapps.io/da_prototyp/
+version: 1

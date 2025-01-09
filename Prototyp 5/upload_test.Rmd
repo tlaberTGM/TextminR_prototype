@@ -1,0 +1,194 @@
+---
+title: "uload-test"
+author: "Nicolas Pfeiler"
+date: "2024-03-18"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(jsonlite)
+
+# CSV-Datei lesen
+data <- read.csv("test.csv", stringsAsFactors = FALSE)
+
+# Definieren der gesuchten Spaltennamen
+required_columns <- c("author", "year", "text")
+
+# Überprüfen, welche der gesuchten Spalten im Datensatz vorhanden sind
+existing_columns <- required_columns[required_columns %in% colnames(data)]
+
+# Warnung, wenn nicht alle erforderlichen Spalten vorhanden sind
+if (length(existing_columns) < length(required_columns)) {
+  missing_columns <- required_columns[!required_columns %in% colnames(data)]
+  warning(paste("Folgende erforderliche Spalten wurden nicht gefunden:", paste(missing_columns, collapse=", "), 
+                "\nBitte überprüfen Sie die Spaltennamen im CSV."))
+}
+
+count_words <- function(text, option) {
+  if(option == "absolut") {
+    result <- str_count(text, fixed(word, ignore_case = TRUE))
+  } else {
+    result <- str_count(text, fixed(word, ignore_case = TRUE)) / str_count(text, "\\b\\w+\\b")
+  }
+  return(result)
+}
+
+getMap <- function(years_start, years_end, word, option, output, sampled) {
+  
+  if(sampled) {
+    res <- GET(url, add_headers(.headers=headers), query=list(minYear=years_start, maxYear=years_end, combined_texts="false", sampled="true"))
+  } else {
+    res <- GET(url, add_headers(.headers=headers), query=list(minYear=years_start, maxYear=years_end, combined_texts="false"))
+  }
+  content <- fromJSON(rawToChar(res$content))
+  data <- content$data
+  
+  colnames(data)[1] <- "id"
+  data$id <- NULL
+  data$title <- NULL
+  data$year <- NULL
+  data$language <- NULL
+  data$source <- NULL
+  data$birth_place <- NA
+  data$country <- NA
+  data$lat <- NA
+  data$long <- NA
+  data$freq <- NA
+  
+  res <- GET("https://api.textminr.tech/authors", add_headers(.headers=headers))
+  content_author <- fromJSON(rawToChar(res$content))
+  authorData <- content_author$data
+  
+  if(sampled) {
+    for(i in 1:nrow(data)) {
+      text <- data$text[i]
+      temp_freq <- 0
+      
+      temp_freq <- temp_freq + count_words(text, option)
+      
+      if(option == "absolut") {
+        data$freq[i] <- temp_freq
+      } else {
+        data$freq[i] <- temp_freq / j
+      }
+      
+      filtered <- authorData %>% filter(name == data$author[i])
+      
+      if (nrow(filtered) > 0) {
+        data$birth_place[i] <- filtered$birth_place
+        data$country[i] <- filtered$country
+        data$lat[i] <- filtered$lat
+        data$long[i] <- filtered$long
+      }
+    }
+  } else {
+    for(i in 1:nrow(data)) {
+      text <- data$text[i][[1]]
+      temp_freq <- 0
+      
+      for(j in 1:nrow(text)) {
+        temp_freq <- temp_freq + count_words(text$part[j], option)
+      }
+      
+      if(option == "absolut") {
+        data$freq[i] <- temp_freq
+      } else {
+        data$freq[i] <- temp_freq / j
+      }
+      
+      filtered <- authorData %>% filter(name == data$author[i])
+      
+      if (nrow(filtered) > 0) {
+        data$birth_place[i] <- filtered$birth_place
+        data$country[i] <- filtered$country
+        data$lat[i] <- filtered$lat
+        data$long[i] <- filtered$long
+      }
+    }
+  }
+  
+  data <- na.omit(data)
+  data$lat <- as.numeric(data$lat)
+  data$long <- as.numeric(data$long)
+  
+  map <- download_map_data("custom/world")
+  
+  if(output == "pro Stadt") {
+    if(option == "absolut") {
+      data_bubble <- data %>%
+        group_by(birth_place) %>%
+        summarise(
+          lat = first(lat),
+          long = first(long),
+          freq = sum(freq, na.rm = TRUE)
+        ) %>%
+        ungroup()
+    } else {
+      data_bubble <- data %>%
+        group_by(birth_place) %>%
+        summarise(
+          lat = first(lat),
+          long = first(long),
+          freq = mean(freq, na.rm = TRUE)
+        ) %>%
+        ungroup()
+      
+      data_bubble$freq <- round(data_bubble$freq * 100, 2)
+    }
+    
+    colnames(data_bubble)[1] <- "name"
+    colnames(data_bubble)[3] <- "lon"
+    colnames(data_bubble)[4] <- "z"
+    data_bubble <- subset(data_bubble, z != 0)
+    
+    return(highchart(type = "map") |> 
+             hc_add_series(
+               mapData = map,
+               name = "Basemap"
+             ) %>%
+             hc_add_series(
+               data = data_bubble, 
+               type = "mapbubble",
+               name = "Countries", 
+               maxSize = "12%"
+             ) %>%
+             hc_mapNavigation(enabled = TRUE))
+    
+  } else {
+    if(option == "absolut") {
+      data_countries <- data %>%
+        group_by(country) %>%
+        summarise(freq = sum(freq, na.rm = TRUE)) %>%
+        ungroup()
+    } else {
+      data_countries <- data %>%
+        group_by(country) %>%
+        summarise(freq = mean(freq, na.rm = TRUE)) %>%
+        ungroup()
+      
+      data_countries$freq <- round(data_countries$freq * 100, 2)
+    }
+    
+    colnames(data_countries)[1] <- "code"
+    colnames(data_countries)[2] <- "value"
+    data_countries <- subset(data_countries, value != 0)
+    
+    return(highchart(type = "map") |> 
+             hc_add_series_map(
+               map = map,
+               df = data_countries, 
+               value = "value",
+               joinBy = c("hc-a2", "code"), 
+               name = "Countries"
+             ) %>%
+             hc_mapNavigation(enabled = TRUE))
+  }
+}
+
+getMap(1840, 1845, "hallo", "relativ", "pro Stadt", TRUE)
+```
+

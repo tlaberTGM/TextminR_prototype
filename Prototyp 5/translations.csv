@@ -1,0 +1,48 @@
+id|Deutsch|English
+generate|Generieren|Generate
+line_title|Liniendiagramme|Line charts
+line_description|Unser Werkzeug ermöglicht es, die Relevanz selbst gewählter Wörter oder die Anzahl ihrer Vorkommen innerhalb eines bestimmten Zeitraums zu visualisieren.|Our tool allows visualizing the relevance of self-selected words or the number of their occurrences within a specific time frame.
+line_text_input|Geben Sie Wörter, getrennt durch Kommas, ein:|Enter words, separated by commas:
+line_rb_1|Darstellungsform der Wortfrequenzen:|Representation of word frequencies:
+line_rb_1_1|absolut|absolute
+line_rb_1_2|relativ|relative
+line_rb_1_3|skaliert|scaled
+line_rb_1_info_1_title|Absolute Wortfrequenzen|Absolute word frequencies
+line_rb_1_info_1_text|Hierbei werden die absoluten Vorkommen der Wörter angezeigt, also die tatsächliche Anzahl der Wörter, die pro Jahr gefunden wurden. Da das Volumen der Textdaten in unserer Datenbank pro Jahr variiert, könnten die Ergebnisse irreführend sein.|This shows the absolute occurrences of words, i.e., the actual number of words found per year. Since the volume of text data in our database varies by year, the results could be misleading.
+line_rb_1_info_2_title|Relative Wortfrequenzen|Relative word frequencies
+line_rb_1_info_2_text|Die relativen Vorkommen ergeben sich aus dem Verhältnis der absoluten Wortfrequenz zur Gesamtzahl der Wörter, ausgedrückt in Prozent.|The relative occurrences result from the ratio of the absolute word frequency to the total number of words, expressed as a percentage.
+line_rb_1_info_3_title|Skalierte Wortfrequenzen|Scaled word frequencies
+line_rb_1_info_3_text|Hier werden alle relativen Wortfrequenzen auf einen Bereich zwischen Null und Eins skaliert. Diese Methode ermöglicht die Untersuchung von Korrelationen und Unabhängigkeiten zwischen Begriffen, jedoch nicht ihrer individuellen, absoluten Relevanz. Diese Methode eignet sich besonders bei der Analyse mehrerer Wörter.|All relative word frequencies are scaled to a range between zero and one. This method allows for the examination of correlations and independencies between terms but not their individual, absolute relevance. This method is particularly useful when analyzing multiple words.
+line_rb_2|Umfang der Textanalyse:|Scope of text analysis:
+line_rb_2_1|Volltext|Full text
+line_rb_2_2|Stichproben|Samples
+line_rb_2_info_1|Es werden alle Texte unserer Datenbank, die in das ausgewählte Zeitintervall fallen, durchsucht. Bitte beachten Sie, dass längere Wartezeiten entstehen können.|All texts in our database that fall within the selected time interval are searched. Please note that this may result in longer waiting times.
+line_rb_2_info_2|Es wird nur der mittlere Teil jedes Textes analysiert, vergleichbar mit der Länge eines Kapitels. Diese Methode ist zeiteffizienter, kann aber zu weniger genauen Ergebnissen führen.|Only the middle part of each text is analyzed, comparable to the length of a chapter. This method is more time-efficient but may lead to less accurate results.
+line_rb_3|Ausgabeformat:|Output format:
+line_rb_3_1|Originaldaten|Original data
+line_rb_3_2|Regression|Regression
+line_rb_3_info_1|Die Wortfrequenzen aller Texte eines Jahres werden zusammengefasst und durch gerade Linien verbunden, um einen zeitlichen Verlauf darzustellen.|The word frequencies of all texts from a year are aggregated and connected by straight lines to create a timeline.
+line_rb_3_info_2|Hierbei wird eine einfache Regression mit der Funktion "geom_line" aus dem R-Paket "ggplot2" verwendet.|This option uses a simple regression with the "geom_line" function from the R package "ggplot2".
+map_title|Kartendiagramme|Map charts
+map_description|Unser Werkzeug ermöglicht die geografische Visualisierung von Textdaten, um zu zeigen, wie oft ein ausgewähltes Wort in verschiedenen Regionen innerhalb eines angegebenen Zeitraums vorkommt.|Our tool enables the geographic visualization of text data to show how often a selected word occurs in different regions within a specified time period.
+map_text_input|Geben Sie ein Wort ein|Enter one word
+map_rb_1|Darstellungsform der Wortfrequenzen:|Representation of word frequencies:
+map_rb_1_1|absolut|absolute
+map_rb_1_2|relativ|relative
+map_rb_1_info_1_title|Absolute Wortfrequenzen|Absolute word frequencies
+map_rb_1_info_1_text|Es werden die tatsächlichen Vorkommen der Wörter angezeigt, also die Anzahl der Wörter, die pro Jahr gefunden wurden. Die variierende Menge an Textdaten pro Jahr kann die Ergebnisse beeinflussen.|The actual occurrences of words are shown, i.e., the number of words found per year. The varying amount of text data per year can affect the results.
+map_rb_1_info_2_title|Relative Wortfrequenzen|Relative word frequencies
+map_rb_1_info_2_text|Die relativen Vorkommen basieren auf dem Verhältnis der absoluten Wortfrequenz zur Gesamtzahl der Wörter, ausgedrückt in Prozent.|The relative occurrences are based on the ratio of the absolute word frequency to the total number of words, expressed as a percentage.
+map_rb_2|Umfang der Textanalyse:|Scope of text analysis:
+map_rb_2_1|Volltext|Full text
+map_rb_2_2|Stichproben|Samples
+map_rb_2_info_1|Es werden alle Texte unserer Datenbank, die in das ausgewählte Zeitintervall fallen, durchsucht. Längere Wartezeiten sind möglich.|All texts in our database that fall within the selected time interval are searched. Longer waiting times are possible.
+map_rb_2_info_2|Nur der mittlere Teil jedes Textes wird analysiert, was der Länge eines Kapitels entspricht. Diese Methode ist schneller, kann aber weniger präzise sein.|Only the middle part of each text is analyzed, equivalent to the length of a chapter. This method is faster but may be less precise.
+map_rb_3|Ausgabeformat:|Output format:
+map_rb_3_1|pro Stadt|per city
+map_rb_3_2|pro Land|per country
+map_rb_3_info_1|Diese Option ermöglicht einen detaillierten Einblick in die lokale Relevanz von Wörtern, indem Blasen auf der Weltkarte platziert werden, deren Größe von der jeweiligen Wortfrequenz abhängt.|This option provides a detailed insight into the local relevance of words by placing bubbles on the world map, the size of which depends on the respective word frequency.
+map_rb_3_info_2|Die Wortfrequenzen aller Städte eines Landes werden zusammengefasst und dargestellt. Je dunkler ein Land gefärbt ist, desto höher war die Relevanz des Wortes.|The word frequencies of all cities within a country are aggregated and displayed. The darker a country is colored, the higher the word's relevance.
+cloud_title|Wordcloud|Word cloud
+cloud_description|Unser Werkzeug ermöglicht die Erstellung von Wortwolken, die die Häufigkeit und Relevanz von Wörtern visuell darstellen.|Our tool enables the creation of word clouds that visually represent the frequency and relevance of words.
+cloud_lim|Maximale Anzahl auszugebender Wörter:|Maximum number of words to display:

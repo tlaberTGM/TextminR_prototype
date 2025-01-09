@@ -1,0 +1,12 @@
+name: TextminR_Prototyp
+title: TextminR_Prototyp
+username: textminr
+account: textminr
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 10482329
+bundleId: 8389377
+url: https://textminr.shinyapps.io/TextminR_Prototyp/
+version: 1
+asMultiple: FALSE
+asStatic: FALSE

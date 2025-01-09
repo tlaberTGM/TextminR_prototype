@@ -1,0 +1,44 @@
+---
+title: "language_test"
+author: "Nicolas Pfeiler"
+date: "2024-03-07"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(shiny)
+
+data <- read.csv("translations.csv", sep = "|")
+
+getText <- function(id, language) {
+  return(texts[texts$id == id, language])
+}
+
+print(getText("line_title", "de"))
+print(getText("line_rb_1_info_3_text", "en"))
+```
+
+
+```{r}
+library(ggplot2)
+
+year <- c(1800:1810)
+frequency <- c(29, 29, 28, 26, 24, 17, 14, 8, 14, 20, 29)
+
+df <- data.frame(
+  year = year,
+  frequency = frequency
+)
+
+ggplot(data=df, aes(x=year, y=frequency)) +
+  geom_point(size=2.5) +
+  geom_line(size=1.3)
+
+ggplot(data=df, aes(x=year, y=frequency)) +
+  geom_point(size=2.5) +
+  geom_smooth(method = "loess", se = FALSE, size=1.3)
+```
